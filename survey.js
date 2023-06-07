@@ -3,37 +3,22 @@ const { stdin: input, stdout: output } = require('process');
 
 const rl = readline.createInterface({ input, output });
 const answers = {};
-// rl.question('What do you think of Node.js? ', (answer) => {
-//   console.log(`Thank you for your valuable feedback: ${answer}`);
-//   rl.close();
-// });
+const questions = ["What is your name? ", "What is an activity you like doing? ", "Which meal is your favorite? ", "What is your favorite sport? ", "What is your superpower? "];
 
-rl.question("What is your name? ", (name) => {
-  answers.name = name;
-  rl.question("What is an activity you like doing? ", (hobby) => {
-    answers.hobby = hobby;
-    rl.question("What do you listen to while doing that? ", (music) => {
-      answers.music = music;
-      rl.question("Which meal is your favorite? ", (meal) => {
-        answers.meal = meal;
-        rl.question("Which sport is your favorite? ", (sport) => {
-          answers.sport = sport;
-          rl.question("What is your superpower? ", (superPower) => {
-            answers.superPower = superPower;
-            console.log("Your profile information: ");
-            // for(let key in answers) {
-            //   console.log(`${key}: ${answers[key]}`);
-            // }
-            console.log(`Hi there, ${answers.name}!`);
-            console.log(`You are interested in ${answers.hobby}, and you like listening to ${answers.music}.`);
-            console.log(`Your favorite meal is ${answers.meal}`);
-            console.log(`You like ${answers.sport}, and your superpower is ${answers.superPower}`);
-            console.log("Thank you!");
-            rl.close();
-          });
-        });
-      });
+const askQuestion = (index, callback) => {
+  if (index < questions.length) {
+    rl.question(questions[index], (answer) => {
+      answers[questions[index]] = answer;
+      askQuestion(index + 1, callback); // recursion to loop through all questions
     });
-  });
-});
+  } else {
+    rl.close();
+    callback();
+  }
+};
 
+askQuestion(0, () => { // my function used as callback
+  for (let key in answers) {
+    console.log(key, answers[key]);
+  }
+});
